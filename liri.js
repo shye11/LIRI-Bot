@@ -27,26 +27,28 @@ if (commandList[command]) {
     console.log('Unrecognized command');
 };
 
+// should default to The Sign Ace of Base for spotifyThis function - wasn't able to get it to work
 if ((command === 'spotify-this-song') && (argument === undefined)) {
     song = 'The Sign Ace of Base';
 };
 
+// should default to Mr. Nobody for movieThis function - console.logs work but wasn't able to get data for Mr. Nobody to load
 if ((command === 'movie-this') && (argument === undefined)) {
     console.log("If you haven't watched 'Mr. Nobody,' then you should: http://www.imdb.com/title/tt0485947/");
     console.log("It's on Netflix!");
     movie = 'Mr. Nobody';
 };
 
+//should call random.txt as command - not functioning
 function whatItSays() {
     fs.readFile('random.txt', 'utf8', function (error, data) {
+        var dataRandom = data.split(',');
+        command = dataRandom[0];
+        argument = dataRandom[1];
+        run(command + argument);
         if (error) {
             return console.log(error);
         }
-
-        // grab the name of the song and then call spotify
-        var dataRandom = data.split(',');
-        argument = dataRandom[1];
-        spotifyThisSong();
 });
 
 };
@@ -75,7 +77,7 @@ function spotifyThisSong(song) {
         .search({
         type: 'track',
         query: song,
-        limit: 1,
+        limit: 10,
     })
         .then(function(response) {
             response.tracks.items.forEach(function (track) {
